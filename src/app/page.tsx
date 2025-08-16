@@ -1,103 +1,138 @@
-import Image from "next/image";
+'use client';
+
+import { useState } from 'react';
+import TodoItem from '@/components/TodoItem';
+import SearchInput from '@/components/ui/SearchInput';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import ErrorMessage from '@/components/ui/ErrorMessage';
+import EmptyState from '@/components/ui/EmptyState';
+import ResponsiveHeader from '@/components/header/ResponsiveHeader';
+import { useApiTodos } from '@/hooks/useApiTodos';
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const { data: todos, loading, error, addTodo, toggleTodo, refetch } = useApiTodos();
+  const [newTodo, setNewTodo] = useState('');
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+  const handleAddTodo = async () => {
+    if (newTodo.trim()) {
+      try {
+        await addTodo(newTodo.trim());
+        setNewTodo('');
+      } catch (err) {
+        // 에러는 이미 훅에서 처리됨
+      }
+    }
+  };
+
+  const todoItems = todos.filter(todo => !todo.isCompleted);
+  const completedItems = todos.filter(todo => todo.isCompleted);
+  const isEmpty = todoItems.length === 0 && completedItems.length === 0;
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <LoadingSpinner size="lg" message="할 일을 불러오는 중..." />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <ErrorMessage error={error} onRetry={refetch} showRetry />
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-white">
+      <ResponsiveHeader />
+
+      {/* Main Content */}
+      <div className="max-w-6xl mx-auto p-8">
+
+        {/* Input Section */}
+        <div className="flex gap-2 sm:gap-4 mb-8 items-center">
+          <div className="flex-1 min-w-0">
+            <SearchInput
+              value={newTodo}
+              onChange={setNewTodo}
+              placeholder="할 일을 입력해주세요"
+              width={800}
+              height={80}
+              className="w-full"
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          </div>
+          <button
+            onClick={handleAddTodo}
+            className="hover:opacity-80 transition-opacity"
           >
-            Read our docs
-          </a>
+            <img 
+              src={isEmpty ? "/btn/add_lg_purple.png" : "/btn/add_lg.png"}
+              alt="추가하기" 
+              className="h-12 w-auto hidden md:block"
+            />
+            <img 
+              src={isEmpty ? "/btn/add_sm_purple.png" : "/btn/add_sm.png"}
+              alt="추가하기" 
+              className="h-8 w-auto block md:hidden"
+            />
+          </button>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+        {/* Todo Sections */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* TO DO Section */}
+          <div>
+            <div className="mb-6">
+              <img src="/img/todo/todo.png" alt="TO DO" className="h-12 w-auto" />
+            </div>
+            <div className="space-y-4">
+              {todoItems.length > 0 ? (
+                todoItems.map(todo => (
+                  <TodoItem
+                    key={todo.id}
+                    todo={todo}
+                    onToggle={toggleTodo}
+                  />
+                ))
+              ) : (
+                <EmptyState
+                  title="할 일이 없어요"
+                  description="할 일이 없어요.\nTODO를 새롭게 추가해주세요!"
+                  imageSrc="/img/empty/write_lg.png"
+                  imageAlt="할 일이 없어요"
+                />
+              )}
+            </div>
+          </div>
+
+          {/* DONE Section */}
+          <div>
+            <div className="mb-6">
+              <img src="/img/done/done.png" alt="DONE" className="h-12 w-auto" />
+            </div>
+            <div className="space-y-4">
+              {completedItems.length > 0 ? (
+                completedItems.map(todo => (
+                  <TodoItem
+                    key={todo.id}
+                    todo={todo}
+                    onToggle={toggleTodo}
+                  />
+                ))
+              ) : (
+                <EmptyState
+                  title="다 한 일이 없어요"
+                  description="아직 다 한 일이 없어요.\n해야 할 일을 체크해보세요!"
+                  imageSrc="/img/empty/empty_lg.png"
+                  imageAlt="다 한 일이 없어요"
+                />
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
