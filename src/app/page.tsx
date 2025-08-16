@@ -18,7 +18,7 @@ export default function Home() {
       try {
         await addTodo(newTodo.trim());
         setNewTodo('');
-      } catch (err) {
+      } catch {
         // 에러는 이미 훅에서 처리됨
       }
     }

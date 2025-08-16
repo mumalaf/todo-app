@@ -71,7 +71,7 @@ export function validateImageFile(file: File): { valid: boolean; error?: string 
 /**
  * 디바운스 함수
  */
-export function debounce<T extends (...args: any[]) => any>(
+export function debounce<T extends (...args: unknown[]) => unknown>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {

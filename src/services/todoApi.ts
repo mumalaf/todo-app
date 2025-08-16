@@ -108,7 +108,7 @@ export class TodoApiService {
 
       const result: ImageUploadResponse = await response.json();
       return result.url;
-    } catch (error) {
+    } catch {
       throw new Error('이미지 업로드 중 오류가 발생했습니다.');
     }
   }
@@ -124,5 +124,5 @@ export const todoApi = new TodoApiService();
 
 // 개발 환경에서 디버깅용
 if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
-  (window as any).todoApi = todoApi;
+  (window as Record<string, unknown>).todoApi = todoApi;
 }

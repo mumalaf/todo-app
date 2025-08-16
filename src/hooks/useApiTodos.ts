@@ -36,7 +36,7 @@ export function useApiTodos(): UseApiTodosReturn {
 
   useEffect(() => {
     loadTodos();
-  }, []);
+  }, [loadTodos]);
 
   const addTodo = useCallback(async (name: string, memo?: string): Promise<Todo> => {
     try {

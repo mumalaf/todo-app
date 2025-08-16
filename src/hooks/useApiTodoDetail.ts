@@ -98,7 +98,7 @@ export function useApiTodoDetail(todoId: string): UseApiTodoDetailReturn {
       try {
         await updateTodo({ memo });
         router.push('/');
-      } catch (err) {
+      } catch {
         // 에러는 이미 updateTodo에서 처리됨
       }
     }
