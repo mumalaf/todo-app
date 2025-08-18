@@ -20,15 +20,6 @@ export default function ItemDetailPage() {
   const [memo, setMemo] = useState('');
   const [itemName, setItemName] = useState('');
   const [isEditingName, setIsEditingName] = useState(false);
-
-  // 유효하지 않은 ID 처리
-  if (!rawId || isNaN(itemId) || itemId <= 0) {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <ErrorMessage error="유효하지 않은 할 일 ID입니다." />
-      </div>
-    );
-  }
   
   const {
     data: item,
@@ -91,6 +82,15 @@ export default function ItemDetailPage() {
       await handleImageUpload(file);
     }
   };
+
+  // 유효하지 않은 ID 처리
+  if (!rawId || isNaN(itemId) || itemId <= 0) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <ErrorMessage error="유효하지 않은 할 일 ID입니다." />
+      </div>
+    );
+  }
 
   if (loading) {
     return (
