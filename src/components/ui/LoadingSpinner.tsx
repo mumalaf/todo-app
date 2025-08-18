@@ -1,3 +1,4 @@
+import React from 'react';
 import { BaseComponentProps } from '@/types/common';
 
 interface LoadingSpinnerProps extends BaseComponentProps {
@@ -5,7 +6,7 @@ interface LoadingSpinnerProps extends BaseComponentProps {
   message?: string;
 }
 
-export default function LoadingSpinner({ 
+const LoadingSpinner = React.memo(function LoadingSpinner({ 
   size = 'md', 
   message = '로딩 중...',
   className = '' 
@@ -26,4 +27,6 @@ export default function LoadingSpinner({
       )}
     </div>
   );
-}
+});
+
+export default LoadingSpinner;

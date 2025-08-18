@@ -46,3 +46,18 @@ export const ERROR_MESSAGES = {
   forbidden: '접근이 거부되었습니다.',
   generic: '알 수 없는 오류가 발생했습니다.'
 } as const;
+
+export const EMPTY_STATE_MESSAGES = {
+  todoEmpty: {
+    title: '',
+    description: '할 일이 없어요. \n TODO를 새롭게 추가해주세요!',
+    imageSrc: '/img/empty/write_lg.png',
+    imageAlt: '할 일이 없어요'
+  },
+  doneEmpty: {
+    title: '',
+    description: '아직 다 한 일이 없어요. \n 해야 할 일을 체크해보세요!',
+    imageSrc: '/img/empty/empty_lg.png',
+    imageAlt: '다 한 일이 없어요'
+  }
+} as const;

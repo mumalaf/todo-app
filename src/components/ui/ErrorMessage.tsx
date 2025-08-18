@@ -1,3 +1,4 @@
+import React from 'react';
 import { BaseComponentProps } from '@/types/common';
 
 interface ErrorMessageProps extends BaseComponentProps {
@@ -6,7 +7,7 @@ interface ErrorMessageProps extends BaseComponentProps {
   showRetry?: boolean;
 }
 
-export default function ErrorMessage({ 
+const ErrorMessage = React.memo(function ErrorMessage({ 
   error, 
   onRetry, 
   showRetry = false,
@@ -29,4 +30,6 @@ export default function ErrorMessage({
       )}
     </div>
   );
-}
+});
+
+export default ErrorMessage;

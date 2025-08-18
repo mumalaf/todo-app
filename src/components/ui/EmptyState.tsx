@@ -1,3 +1,4 @@
+import React from 'react';
 import { BaseComponentProps } from '@/types/common';
 
 interface EmptyStateProps extends BaseComponentProps {
@@ -11,7 +12,7 @@ interface EmptyStateProps extends BaseComponentProps {
   };
 }
 
-export default function EmptyState({
+const EmptyState = React.memo(function EmptyState({
   title,
   description,
   imageSrc,
@@ -43,4 +44,6 @@ export default function EmptyState({
       )}
     </div>
   );
-}
+});
+
+export default EmptyState;

@@ -1,4 +1,4 @@
-import { Todo, TodoFilter, TodoStats } from '@/types/todo';
+import { Item, ItemFilter, ItemStats } from '@/types/item';
 
 /**
  * 클래스명을 조건부로 결합하는 유틸리티 함수
@@ -8,27 +8,27 @@ export function cn(...classes: (string | undefined | null | boolean)[]): string 
 }
 
 /**
- * Todo 목록을 필터링하는 함수
+ * Item 목록을 필터링하는 함수
  */
-export function filterTodos(todos: Todo[], filter: TodoFilter): Todo[] {
+export function filterItems(items: Item[], filter: ItemFilter): Item[] {
   switch (filter) {
     case 'completed':
-      return todos.filter(todo => todo.isCompleted);
+      return items.filter(item => item.isCompleted);
     case 'active':
-      return todos.filter(todo => !todo.isCompleted);
+      return items.filter(item => !item.isCompleted);
     default:
-      return todos;
+      return items;
   }
 }
 
 /**
- * Todo 통계를 계산하는 함수
+ * Item 통계를 계산하는 함수
  */
-export function calculateTodoStats(todos: Todo[]): TodoStats {
+export function calculateItemStats(items: Item[]): ItemStats {
   return {
-    total: todos.length,
-    completed: todos.filter(todo => todo.isCompleted).length,
-    active: todos.filter(todo => !todo.isCompleted).length
+    total: items.length,
+    completed: items.filter(item => item.isCompleted).length,
+    active: items.filter(item => !item.isCompleted).length
   };
 }
 
@@ -45,28 +45,7 @@ export function formatFileSize(bytes: number): string {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
 
-/**
- * 이미지 파일인지 확인하는 함수
- */
-export function isImageFile(file: File): boolean {
-  return file.type.startsWith('image/');
-}
-
-/**
- * 이미지 파일 유효성 검사
- */
-export function validateImageFile(file: File): { valid: boolean; error?: string } {
-  if (!isImageFile(file)) {
-    return { valid: false, error: '이미지 파일만 업로드 가능합니다.' };
-  }
-  
-  const maxSize = 5 * 1024 * 1024; // 5MB
-  if (file.size > maxSize) {
-    return { valid: false, error: '파일 크기는 5MB 이하여야 합니다.' };
-  }
-  
-  return { valid: true };
-}
+// 이미지 검증 기능은 utils/imageValidation.ts로 이동됨
 
 /**
  * 디바운스 함수

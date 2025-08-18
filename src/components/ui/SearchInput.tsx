@@ -6,6 +6,7 @@ import NextImage from 'next/image';
 interface SearchInputProps {
   value?: string;
   onChange?: (value: string) => void;
+  onEnter?: () => void;
   placeholder?: string;
   className?: string;
   width?: number;
@@ -14,7 +15,8 @@ interface SearchInputProps {
 
 const SearchInput = memo(function SearchInput({ 
   value = '', 
-  onChange, 
+  onChange,
+  onEnter,
   placeholder = "검색어를 입력하세요",
   className = '',
   width = 400,
@@ -33,6 +35,11 @@ const SearchInput = memo(function SearchInput({
         type="text"
         value={value}
         onChange={(e) => onChange?.(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            onEnter?.();
+          }
+        }}
         placeholder={placeholder}
         className="absolute inset-0 w-full h-full bg-transparent text-gray-800 placeholder:text-gray-500 outline-none px-6 flex items-center text-base"
       />

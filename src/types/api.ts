@@ -18,14 +18,12 @@ export interface PaginatedResponse<T> {
   limit?: number;
 }
 
-// 요청 타입
+// CreateItemDto에 맞춘 요청 타입
 export interface CreateItemRequest {
   name: string;
-  memo?: string;
-  imageUrl?: string;
-  isCompleted?: boolean;
 }
 
+// UpdateItemDto에 맞춘 요청 타입
 export interface UpdateItemRequest {
   name?: string;
   memo?: string;
